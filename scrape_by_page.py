@@ -9,7 +9,7 @@ import openpyxl
 # returns the soup based on the url and headers given.
 # Prints error message if website recognizes us as bot.
 def get_soup(url, headers):
-    time.sleep(random.randint(10, 30))
+    #time.sleep(random.randint(10, 30))
     request = urllib.request.Request(url, headers=headers)
     source = urllib.request.urlopen(request).read()
     soup = bs4.BeautifulSoup(source,'html.parser')
@@ -41,9 +41,9 @@ def get_page_links(city_url):
 # process the house given the url to the house's entry, headers, and the dataframe (df). adds info as row to df.
 def process_page(page_url, headers, df):
     soup = get_soup(page_url, headers)
-
     
-    houses = [house for house in soup.find_all('li', {'class', "component_property-card js-component_property-card "})]
+    houses = [house for house in soup.find_all('li', {'class', "component_property-card js-component_property-card"})]
+
 
     # TODO: check if error message came up and don't continue if so
     listing_id = ""
@@ -63,56 +63,58 @@ def process_page(page_url, headers, df):
     sqft = ""
     garage = ""
     for house in houses:
-      listing_id = house.get("data-listingid")
-      latlong = house.find_all("meta")
-      if latlong != None:
-          latitude = latlong[0].get("content")
-          longitude = latlong[0].get("content")
-      sold_date = house.find("span", {"class","label c_label label-gray-darker"})
-      if sold_date != None:
-          sold_date = sold_date.text.split("on ")[1].strip()
-      url = "www.realtor.com" + house.get("data-url")
-      image = house.find("img")
-      if image != None:
-          image = image.get("src")
-      price = house.find("span", {"class","data-price"})
-      if price != None:
-          price = price.text
-      
-      stAdd = house.find("span", {'itemprop':'streetAddress'})
-      if stAdd != None:
-          stAdd = stAdd.text
-      city = house.find("span", {'itemprop':'addressLocality'})
-      if city != None:
-          city = city.text
-      region = house.find("span", {'itemprop':'addressRegion'})
-      if region != None:
-          region = region.text
-      postalCode = house.find("span", {'itemprop':'postalCode'})
-      if postalCode != None:
-          postalCode = postalCode.text
-      bed = house.find("span", {"class":"data-value meta-beds"})
-      if bed != None:
-          bed = bed.text
-      bath = house.find("li", {"data-label":"property-meta-baths"})
-      if bath != None:
-          bath = bath.span.text
-      sqft = house.find("li", {"data-label":"property-meta-sqft"})
-      if sqft != None:
-          sqft = sqft.span.text
-      garage = house.find("li", { "data-label":"property-meta-garage"})
-      if garage != None:
-          garage = garage.span.text
-      prop_type = soup.find("div",  {"class":"property-type"})
-      if prop_type != None:
-          prop_type = prop_type.text
+        listing_id = house.get("data-listingid")
+        latlong = house.find_all("meta")
+        if latlong != None:
+            latitude = latlong[0].get("content")
+            longitude = latlong[0].get("content")
+        sold_date = house.find("span", {"class","label c_label label-gray-darker"})
+        if sold_date != None:
+            sold_date = sold_date.text.split("on ")[1].strip()
+        url = "www.realtor.com" + house.get("data-url")
+        image = house.find("img")
+        if image != None:
+            image = image.get("src")
+        price = house.find("span", {"class","data-price"})
+        if price != None:
+            price = price.text
+
+        stAdd = house.find("span", {'itemprop':'streetAddress'})
+        if stAdd != None:
+            stAdd = stAdd.text
+        city = house.find("span", {'itemprop':'addressLocality'})
+        if city != None:
+            city = city.text
+        region = house.find("span", {'itemprop':'addressRegion'})
+        if region != None:
+            region = region.text
+        postalCode = house.find("span", {'itemprop':'postalCode'})
+        if postalCode != None:
+            postalCode = postalCode.text
+        bed = house.find("span", {"class":"data-value meta-beds"})
+        if bed != None:
+            bed = bed.text
+        bath = house.find("li", {"data-label":"property-meta-baths"})
+        if bath != None:
+            bath = bath.span.text
+        sqft = house.find("li", {"data-label":"property-meta-sqft"})
+        if sqft != None:
+            sqft = sqft.span.text
+        garage = house.find("li", { "data-label":"property-meta-garage"})
+        if garage != None:
+            garage = garage.span.text
+        prop_type = soup.find("div",  {"class":"property-type"})
+        if prop_type != None:
+            prop_type = prop_type.text
+        info_list = [listing_id, url, image, prop_type, stAdd, city, region, postalCode, latitude, longitude, price, sold_date, bed, bath, sqft, garage]
+        print(info_list)
+        df.loc[df.shape[0]] = info_list
+
 
                 
 
 
 
-    info_list = [listing_id, url, image, prop_type, stAdd, city, region, postalCode, latitude, longitude, price, sold_date, bed, bath, sqft, garage]
-    df.loc[df.shape[0]] = info_list
 
 
             
