@@ -67,7 +67,7 @@ def process_page(page_url, headers, df):
         latlong = house.find_all("meta")
         if latlong != None:
             latitude = latlong[0].get("content")
-            longitude = latlong[01.get("content")
+            longitude = latlong[1].get("content")
         sold_date = house.find("span", {"class","label c_label label-gray-darker"})
         if sold_date != None:
             sold_date = sold_date.text.split("on ")[1].strip()
