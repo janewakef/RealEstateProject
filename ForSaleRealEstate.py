@@ -105,7 +105,7 @@ def process_page(page_url, headers, df):
         prop_type = house.find("div",  {"data-label":"pc-type"})
         if prop_type != None:
             prop_type = prop_type.span.text
-        info_list = [url, prop_type, stAdd, city, region, postalCode,  price,  bed, bath, sqft]
+        info_list = [url, prop_type, streetAdd, city, region, zipCode,  price,  bed, bath, sqft]
         df.loc[df.shape[0]] = info_list
 
 
