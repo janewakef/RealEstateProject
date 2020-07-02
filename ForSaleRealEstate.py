@@ -30,8 +30,7 @@ def get_soup(url, headers):
 # creates the urls to all the pages of the city, returns these in a list
 def get_page_links(city_url):
     num_pages = 10
-    # TODO: make this work
-    #num_pages = city_soup.find_all("span", {"class":"page"})[1].text
+
     page_list = [city_url]
     i = 2
     while i - 1 < num_pages:
@@ -67,18 +66,7 @@ def process_page(page_url, headers, df):
     sqft = ""
     garage = ""
     for house in houses:
-        #listing_id = house.get("data-listingid")
-        #latlong = house.find_all("meta")
-        #if latlong != None:
-        #    latitude = latlong[0].get("content")
-        #    longitude = latlong[1].get("content")
-        #sold_date = house.find("span", {"class","label c_label label-gray-darker"})
-        #        if sold_date != None:
-        #    sold_date = sold_date.text.split("on ")[1].strip()
         url = "www.realtor.com" + house.find("div", {"data-testid":"pc-photo-wrap"}).a.get("href")
-       # image = house.find("img")
-        #if image != None:
-         #   image = image.get("src")
         price = house.find("div", {"data-label":"pc-price-wrapper"})
         if price != None:
            price = price.span.text
@@ -97,9 +85,7 @@ def process_page(page_url, headers, df):
         sqft = house.find("li", {"data-label":"pc-meta-sqft"})
         if sqft != None:
             sqft = sqft.span.text
-        #garage = house.find("li", { "data-label":"property-meta-garage"})
-        #if garage != None:
-         #   garage = garage.span.text
+        
          
          #Most of the property types are listed as "house for sale"
         prop_type = house.find("div",  {"data-label":"pc-type"})
@@ -129,7 +115,6 @@ def main():
 
     headers = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36"}
     city_url = "https://www.realtor.com/realestateandhomes-search/Columbus_OH"
-    #col_names = ["property id", "listing id", "url", "street address", "city", "state", "zip code", "latitude", "longitude", "image", "price", "sold date", "school district", "beds", "bath", "lotsize"]
     names  = ["url", "prop type", "street address", "city", "state", "postal code", "price", "bed", "bath", "sqft"]
   
     # create dataframe
