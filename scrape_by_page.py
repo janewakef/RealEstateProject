@@ -21,9 +21,6 @@ def get_soup(url, headers):
 
 # creates the urls to all the pages of the city, returns these in a list
 def get_page_links(city_url, num_pages):
-    # TODO: make this work
-    #num_pages = city_soup.find_all("span", {"class":"page"})[1].text
-    #page_list = [city_url]
     page_list = []
     i = 1
     while i - 1 < num_pages:
@@ -41,7 +38,6 @@ def process_page(page_url, headers, df):
     houses = [house for house in soup.find_all('li', {'class', "component_property-card js-component_property-card"})]
 
 
-    # TODO: check if error message came up and don't continue if so
     for house in houses:
         listing_id = house.get("data-listingid").strip()
         latlong = house.find_all("meta")
